@@ -27,11 +27,19 @@
      (include-js "/js/app.js")]))
 
 
+(defn get-test []
+  [:h3 "THIS IS A TEXT OF GET"])
+
 (defroutes routes
   (GET "/" [] (loading-page))
   (GET "/about" [] (loading-page))
+  (GET "/orders" []
+    "<h1>All Current Orders:</h1>")
   
   (resources "/")
   (not-found "Not Found"))
 
 (def app (wrap-middleware #'routes))
+
+
+;; To store the state on the backend, just create and atom and have the app alter that.  
