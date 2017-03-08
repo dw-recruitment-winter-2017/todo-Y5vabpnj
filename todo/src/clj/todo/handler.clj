@@ -27,12 +27,16 @@
      (include-js "/js/app.js")]))
 
 
-(defn get-test []
-  [:h3 "THIS IS A TEXT OF GET"])
+
+;; This is where I would save the data in the backend.
+(defn todo-delete []
+  "hello")
+  
 
 (defroutes routes
   (GET "/" [] (loading-page))
   (GET "/about" [] (loading-page))
+  (GET "/delete" [] (todo-delete))
   (GET "/orders" []
     "<h1>All Current Orders:</h1>")
   

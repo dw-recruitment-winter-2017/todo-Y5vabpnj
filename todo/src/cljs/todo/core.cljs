@@ -1,28 +1,15 @@
 (ns todo.core
     (:require [reagent.core :as r :refer [atom]]
+              [ajax.core :refer [GET POST]]
               [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
               [accountant.core :as accountant]))
 
 
-;; -------------------------
-;; FUN COMPONENTS
-(defn simple-component []
-  [:div
-   [:p "I am a component!"]
-   [:p.someclass
-    "I have " [:strong "bold"]
-    [:span {:style {:color "red"}} " and red "] "text."]])  
 
-(defn timer-component []
-  (let [seconds-elapsed (r/atom 0)]
-    (fn []
-      (js/setTimeout #(swap! seconds-elapsed inc) 1000)
-      [:div
-       "Seconds Elapsed: " @seconds-elapsed])))
 
 ;; -------------------------
-;; WR TO-DO COMPONENTS
+;; About page 
 (defn about-component []
   [:div [:h2 "About page"]
   [:p "This is a homework assigned as documented " [:a {:href "https://gist.github.com/cap10morgan/fc8035da1c6c89414b86d77058fdfef5"} "here"] "."]
@@ -32,6 +19,8 @@
 
 ;; -------------------------
 ;; TODO COMPONENTS
+;;  this was taken from the todo https://reagent-project.github.io/ example.  
+
 (defonce todos (r/atom (sorted-map)))
 
 (defonce counter (r/atom 0))
@@ -42,7 +31,7 @@
 
 (defn toggle [id] (swap! todos update-in [id :done] not))
 (defn save [id title] (swap! todos assoc-in [id :title] title))
-(defn delete [id] (swap! todos dissoc id))
+(defn delete [id] (GET "/delete")) ;; this is doesn't work, but this is where I would trigger sending data to backend.
 
 (defn mmap [m f a] (->> m (f a) (into (empty m))))
 (defn complete-all [v] (swap! todos mmap map #(assoc-in % [1 :done] v)))
@@ -101,6 +90,7 @@
          [:section#todoapp
           [:header#header
            [:h1 "Reference TODO LIST"]
+           [:p "using https://reagent-project.github.io/ as template"]
            [todo-input {:id "new-todo"
                         :placeholder "What needs to be done?"
                         :on-save add-todo}]]
